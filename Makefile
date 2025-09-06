@@ -19,7 +19,7 @@ extract_metadata:
 	@$(PYTHON_INTERPRETER) scripts/extract.py data/metadata data/extracted/metadata
 
 process_metadata:
-	@$(PYTHON_INTERPRETER) scripts/process_metadata.py data/extracted/metadata data/processed/metadata/names.csv
+	@$(PYTHON_INTERPRETER) scripts/process_metadata.py data/extracted/metadata data/processed/metadata
 
 ## Delete all compiled Python files
 clean:
