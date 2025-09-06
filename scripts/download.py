@@ -7,6 +7,7 @@ FTP_DIR = "/Cadastro_Nacional_de_Enderecos_para_Fins_Estatisticos/Censo_Demograf
 DICTIONARY_PATH = "Dicionario_CNEFE_Censo_2022.xls"
 ADDRESSES_PATH = "UF"
 
+
 def main(destination: Path):
     ftp = FTP(FTP_HOST, timeout=30)
     ftp.login()
@@ -15,7 +16,7 @@ def main(destination: Path):
     Path(destination).mkdir(exist_ok=True, parents=True)
 
     # Get already downloaded file names
-    downloaded = [f.name for f in Path(destination).rglob('*')]
+    downloaded = [f.name for f in Path(destination).rglob("*")]
 
     if DICTIONARY_PATH not in downloaded:
         with open(Path(destination, DICTIONARY_PATH), "wb") as f:
@@ -34,6 +35,7 @@ def main(destination: Path):
                 ftp.retrbinary(f"RETR {filename}", f.write)
 
     ftp.quit()
+
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
