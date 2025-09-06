@@ -1,9 +1,51 @@
 # Cadastro Nacional de Endereços para Fins Estatísticos [CNEFE](https://www.ibge.gov.br/estatisticas/sociais/populacao/38734-cadastro-nacional-de-enderecos-para-fins-estatisticos.html?=&t=o-que-e)
 
-É uma base de dados de cadastro de endereços georreferenciados de domicílios brasileiros. Esta base é atualizada periodicamente a cada [censo demográgico](https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022.html) do [IBGE](https://www.ibge.gov.br/) e de maneira pontual conforme demandado por pesquisas como a [PNAD contínua](https://www.ibge.gov.br/estatisticas/sociais/saude/17270-pnad-continua.html) e a [POF](https://www.ibge.gov.br/pof2024/)
+Este projeto tem como objetivo **baixar, extrair, processar e consolidar** os dados do **Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE)**, disponibilizados pelo [IBGE](https://www.ibge.gov.br/).  
+O pipeline integra informações do **Censo Demográfico 2022** com metadados territoriais, produzindo **arquivos CSV limpos e estruturados** para análise e utilização em pesquisas e aplicações georreferenciadas.
+
+O CNEFE é uma base de dados de **endereços georreferenciados de domicílios brasileiros**, atualizada periodicamente a cada [censo demográfico](https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022.html) e também de forma pontual conforme demandas de pesquisas como a [PNAD Contínua](https://www.ibge.gov.br/estatisticas/sociais/saude/17270-pnad-continua.html) e a [POF](https://www.ibge.gov.br/pof2024/).
+
+## Visão Geral
+
+O pipeline realiza as seguintes etapas principais:
+
+1. **Download dos Dados**  
+   - Obtém os arquivos do CNEFE diretamente do FTP do IBGE.
+   - Baixa também os arquivos de metadados territoriais (UF, municípios, distritos e subdistritos).
+
+2. **Extração dos Arquivos**  
+   - Descompacta todos os arquivos ZIP dos endereços.
+
+3. **Processamento dos Metadados**  
+   - Gera arquivos JSON com mapeamentos de códigos para nomes (UF, município, distrito e subdistrito).
+
+4. **Processamento dos Endereços**  
+   - Processa os arquivos CSV em chunks para economizar memória.
+   - Aplica os mapeamentos dos metadados.
+   - Padroniza colunas e gera arquivos CSV consolidados e prontos para análise.
 
 
-Dicionário
+### Como Executar o Pipeline
+
+O fluxo completo pode ser executado de forma automatizada usando o Makefile ou manualmente passo a passo.
+
+Via Makefile (Recomendado)
+
+    make all
+
+Isso executará:
+
+1. Download dos dados.
+
+2. Extração dos arquivos.
+
+3. Processamento dos metadados.
+
+4. Processamento final dos endereços.
+
+
+### Dicionário
+As variáveis disponíveis no CNEFE:
 
 | Variável                       | Descrição                                | LEGENDA                                                                                                                                                                                                                     |
 |-------------------------------|-----------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -49,9 +91,43 @@ Dicionário
 ³ Os critérios de coordenadas inválidas estão apresentados no documento metodológico da publicação.
 
 
-Referencias:
-
-IBGE – INSTITUTO BRASILEIRO DE GEOGRAFIA E ESTATÍSTICA. Censo Demográfico 2022. Rio de Janeiro: IBGE, [s.d.]. Disponível em: https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022.html?=&t=o-que-e. Acesso em: 1 set. 2025.
 
 
+## Estrutura de Saída
 
+Após o processamento, o diretório `data/processed` conterá os arquivos CSV consolidados.  
+Cada linha representa um endereço único com as seguintes informações:
+
+| Coluna          | Descrição                      |
+|-----------------|--------------------------------|
+| ID_ENDERECO     | Identificador único do endereço |
+| ESTADO          | Nome da Unidade Federativa      |
+| MUNICIPIO       | Nome do município              |
+| DISTRITO        | Nome do distrito               |
+| SUBDISTRITO     | Nome do subdistrito            |
+| BAIRRO          | Nome do bairro                 |
+| RUA             | Nome do logradouro             |
+| TIPO_ARRUAMENTO | Tipo do logradouro             |
+| NUM_ENDERECO    | Número do endereço             |
+| COMPLEMENTO     | Complemento do endereço        |
+| CEP             | Código postal                  |
+| LATITUDE        | Latitude geográfica            |
+| LONGITUDE       | Longitude geográfica          |
+
+
+
+### Dicionário de Variáveis
+
+O dicionário completo de variáveis originais pode ser encontrado no [CNEFE – IBGE](https://www.ibge.gov.br/estatisticas/sociais/populacao/38734-cadastro-nacional-de-enderecos-para-fins-estatisticos.html?=&t=downloads)
+.
+Parte da tabela original já está incluída no início deste repositório.
+
+### Referencias:
+
+* [CNEFE – Cadastro Nacional de Endereços para Fins Estatísticos](https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022.html?=&t=o-que-e)
+
+* [Censo Demográfico 2022](https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022)
+
+* [PNAD Contínua](https://www.ibge.gov.br/estatisticas/sociais/saude/17270-pnad-continua.html)
+
+* [POF – Pesquisa de Orçamentos Familiares](https://www.ibge.gov.br/pof2024/)

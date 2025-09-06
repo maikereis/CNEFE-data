@@ -21,6 +21,9 @@ extract_metadata:
 process_metadata:
 	@$(PYTHON_INTERPRETER) scripts/process_metadata.py data/extracted/metadata data/processed/metadata
 
+process_addresses:
+	@$(PYTHON_INTERPRETER) scripts/process_addresses.py data/extracted/addresses data/processed/metadata data/processed/addresses 
+
 ## Delete all compiled Python files
 clean:
 	@find . -type f -name "*.py[co]" -delete
