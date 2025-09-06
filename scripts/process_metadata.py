@@ -3,47 +3,64 @@ from pathlib import Path
 
 import pandas as pd
 
+HEADER_POS = 6
 
-def main(source: Path, destination: Path):
+MUNICIPALITY_FILE = "RELATORIO_DTB_BRASIL_2024_MUNICIPIOS.xls"
+MUNICIPALITY_COLUMNS = [
+    "UF",
+    "Nome_UF",
+    "Código Município Completo",
+    "Nome_Município",
+]
 
-    mun_filepath = Path(source, "RELATORIO_DTB_BRASIL_2024_MUNICIPIOS.xls")
+DISTRITAL_FILE = "RELATORIO_DTB_BRASIL_2024_DISTRITOS.xls"
+DISTRITAL_COLUMNS = [
+    "Código Município Completo",
+    "Código de Distrito Completo",
+    "Nome_Distrito",
+]
+
+SUBDISTRITAL_FILE = "RELATORIO_DTB_BRASIL_2024_SUBDISTRITOS.xls"
+SUBDISTRITAL_COLUMNS = [
+    "Código de Distrito Completo",
+    "Código de Subdistrito Completo",
+    "Nome_Subdistrito",
+]
+
+MUNICIPALITY_ID = "Código Município Completo"
+DISTRITAL_ID = "Código de Distrito Completo"
+
+
+def main(source: Path, output_filepath: Path):
+
+    mun_filepath = Path(source, MUNICIPALITY_FILE)
     df_mun = pd.read_excel(
         mun_filepath,
-        skiprows=6,
-        usecols=["UF", "Nome_UF", "Código Município Completo", "Nome_Município"],
+        skiprows=HEADER_POS,
+        usecols=MUNICIPALITY_COLUMNS,
     )
 
-    dis_filepath = Path(source, "RELATORIO_DTB_BRASIL_2024_DISTRITOS.xls")
+    dis_filepath = Path(source, DISTRITAL_FILE)
     df_dis = pd.read_excel(
         dis_filepath,
-        skiprows=6,
-        usecols=[
-            "Código Município Completo",
-            "Código de Distrito Completo",
-            "Nome_Distrito",
-        ],
+        skiprows=HEADER_POS,
+        usecols=DISTRITAL_COLUMNS,
     )
 
-    sub_filepath = Path(source, "RELATORIO_DTB_BRASIL_2024_SUBDISTRITOS.xls")
+    sub_filepath = Path(source, SUBDISTRITAL_FILE)
     df_sub = pd.read_excel(
         sub_filepath,
-        skiprows=6,
-        usecols=[
-            "Código de Distrito Completo",
-            "Código de Subdistrito Completo",
-            "Nome_Subdistrito",
-        ],
+        skiprows=HEADER_POS,
+        usecols=SUBDISTRITAL_COLUMNS,
     )
 
-    df_merged = df_mun.merge(df_dis, on=["Código Município Completo"]).merge(
-        df_sub, on=["Código de Distrito Completo"]
+    df_merged = df_mun.merge(df_dis, on=MUNICIPALITY_ID).merge(
+        df_sub, on=DISTRITAL_ID
     )
 
-    Path(destination).mkdir(exist_ok=True, parents=True)
+    Path(output_filepath).parent.mkdir(exist_ok=True, parents=True)
 
-    merged_filepath = Path(destination, "names.csv")
-
-    df_merged.to_csv(merged_filepath, index=0)
+    df_merged.to_csv(output_filepath, index=0)
 
 
 if __name__ == "__main__":
