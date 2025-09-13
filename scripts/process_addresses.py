@@ -70,7 +70,8 @@ def process_chunk(df: pd.DataFrame, mappings: Dict[str, Dict[str, str]]) -> pd.D
             "COD_UNICO_ENDERECO": "ID_ENDERECO",
             "DSC_LOCALIDADE": "BAIRRO",
             "NOM_SEGLOGR":"RUA",
-            "NOM_TIPO_SEGLOGR": "TIPO_ARRUAMENTO",
+            "NOM_TIPO_SEGLOGR": "TIPO_LOGRADOURO",
+            "NUM_ENDERECO": "NUMERO"
         }
     )
 
