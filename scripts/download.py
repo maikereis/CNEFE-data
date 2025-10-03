@@ -5,7 +5,10 @@ from pathlib import Path
 from tqdm import tqdm
 
 FTP_HOST = "ftp.ibge.gov.br"
-FTP_DIR = "/Cadastro_Nacional_de_Enderecos_para_Fins_Estatisticos/Censo_Demografico_2022/Arquivos_CNEFE/CSV"
+FTP_DIR = (
+    "/Cadastro_Nacional_de_Enderecos_para_Fins_Estatisticos/"
+    "Censo_Demografico_2022/Arquivos_CNEFE/CSV"
+)
 DICTIONARY_PATH = "Dicionario_CNEFE_Censo_2022.xls"
 ADDRESSES_PATH = "UF"
 CHUNK_SIZE = 1024 * 1024 * 100  # 100 MB
