@@ -1,18 +1,29 @@
-import sys
 import json
-import pandas as pd
+import sys
 from pathlib import Path
 from typing import Dict, Iterator
-from tqdm import tqdm
 
+import pandas as pd
+from tqdm import tqdm
 
 CHUNKSIZE = 250_000
 
 COLUMNS = [
-    "COD_UNICO_ENDERECO", "COD_UF", "COD_MUNICIPIO", "COD_DISTRITO",
-    "COD_SUBDISTRITO", "NUM_ENDERECO", "NOM_COMP_ELEM1", "VAL_COMP_ELEM1",
-    "LATITUDE", "DSC_MODIFICADOR", "DSC_LOCALIDADE", "CEP",
-    "NOM_TIPO_SEGLOGR", "LONGITUDE", "NOM_SEGLOGR"
+    "COD_UNICO_ENDERECO",
+    "COD_UF",
+    "COD_MUNICIPIO",
+    "COD_DISTRITO",
+    "COD_SUBDISTRITO",
+    "NUM_ENDERECO",
+    "NOM_COMP_ELEM1",
+    "VAL_COMP_ELEM1",
+    "LATITUDE",
+    "DSC_MODIFICADOR",
+    "DSC_LOCALIDADE",
+    "CEP",
+    "NOM_TIPO_SEGLOGR",
+    "LONGITUDE",
+    "NOM_SEGLOGR",
 ]
 
 DTYPES = {
@@ -36,7 +47,9 @@ def load_mappings(metadata: Path) -> Dict[str, Dict[str, str]]:
     return mappings
 
 
-def process_chunk(df: pd.DataFrame, mappings: Dict[str, Dict[str, str]]) -> pd.DataFrame:
+def process_chunk(
+    df: pd.DataFrame, mappings: Dict[str, Dict[str, str]]
+) -> pd.DataFrame:
     """Process a single dataframe chunk and return cleaned dataframe."""
     df["ESTADO"] = df["COD_UF"].map(mappings["state"])
     df["MUNICIPIO"] = df["COD_MUNICIPIO"].map(mappings["municipality"])
@@ -59,9 +72,19 @@ def process_chunk(df: pd.DataFrame, mappings: Dict[str, Dict[str, str]]) -> pd.D
     # Filter only required columns
     df = df.filter(
         items=[
-            "COD_UNICO_ENDERECO", "ESTADO", "MUNICIPIO", "DISTRITO",
-            "SUBDISTRITO", "DSC_LOCALIDADE", "CEP", "NOM_TIPO_SEGLOGR", "NOM_SEGLOGR",
-            "NUM_ENDERECO", "COMPLEMENTO", "LATITUDE", "LONGITUDE"
+            "COD_UNICO_ENDERECO",
+            "ESTADO",
+            "MUNICIPIO",
+            "DISTRITO",
+            "SUBDISTRITO",
+            "DSC_LOCALIDADE",
+            "CEP",
+            "NOM_TIPO_SEGLOGR",
+            "NOM_SEGLOGR",
+            "NUM_ENDERECO",
+            "COMPLEMENTO",
+            "LATITUDE",
+            "LONGITUDE",
         ]
     )
 
@@ -69,20 +92,24 @@ def process_chunk(df: pd.DataFrame, mappings: Dict[str, Dict[str, str]]) -> pd.D
         columns={
             "COD_UNICO_ENDERECO": "ID_ENDERECO",
             "DSC_LOCALIDADE": "BAIRRO",
-            "NOM_SEGLOGR":"RUA",
+            "NOM_SEGLOGR": "RUA",
             "NOM_TIPO_SEGLOGR": "TIPO_LOGRADOURO",
-            "NUM_ENDERECO": "NUMERO"
+            "NUM_ENDERECO": "NUMERO",
         }
     )
 
 
-def process_file(filepath: Path, destination: Path, mappings: Dict[str, Dict[str, str]]):
+def process_file(
+    filepath: Path, destination: Path, mappings: Dict[str, Dict[str, str]]
+):
     """Process a single CSV file in chunks and save results."""
     output_file = destination / filepath.name
     first_chunk = True
 
     # Count lines for progress bar estimation
-    total_lines = sum(1 for _ in open(filepath, "r", encoding="utf-8")) - 1  # skip header
+    total_lines = (
+        sum(1 for _ in open(filepath, "r", encoding="utf-8")) - 1
+    )  # skip header
     total_chunks = (total_lines // CHUNKSIZE) + 1
 
     chunk_iter: Iterator[pd.DataFrame] = pd.read_csv(
@@ -95,9 +122,7 @@ def process_file(filepath: Path, destination: Path, mappings: Dict[str, Dict[str
     )
 
     with tqdm(
-        total=total_chunks,
-        desc=f"Processing {filepath.name}",
-        unit="chunk"
+        total=total_chunks, desc=f"Processing {filepath.name}", unit="chunk"
     ) as pbar:
         for chunk in chunk_iter:
             processed = process_chunk(chunk, mappings)

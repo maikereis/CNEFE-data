@@ -1,6 +1,6 @@
 # Cadastro Nacional de Endereços para Fins Estatísticos [CNEFE](https://www.ibge.gov.br/estatisticas/sociais/populacao/38734-cadastro-nacional-de-enderecos-para-fins-estatisticos.html?=&t=o-que-e)
 
-Este projeto tem como objetivo **baixar, extrair, processar e consolidar** os dados do **Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE)**, disponibilizados pelo [IBGE](https://www.ibge.gov.br/).  
+Este projeto tem como objetivo **baixar, extrair, processar e consolidar** os dados do **Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE)**, disponibilizados pelo [IBGE](https://www.ibge.gov.br/).
 O pipeline integra informações do **Censo Demográfico 2022** com metadados territoriais, produzindo **arquivos CSV limpos e estruturados** para análise e utilização em pesquisas e aplicações georreferenciadas.
 
 O CNEFE é uma base de dados de **endereços georreferenciados de domicílios brasileiros**, atualizada periodicamente a cada [censo demográfico](https://www.ibge.gov.br/estatisticas/sociais/saude/22827-censo-demografico-2022.html) e também de forma pontual conforme demandas de pesquisas como a [PNAD Contínua](https://www.ibge.gov.br/estatisticas/sociais/saude/17270-pnad-continua.html) e a [POF](https://www.ibge.gov.br/pof2024/).
@@ -9,17 +9,17 @@ O CNEFE é uma base de dados de **endereços georreferenciados de domicílios br
 
 O pipeline realiza as seguintes etapas principais:
 
-1. **Download dos Dados**  
+1. **Download dos Dados**
    - Obtém os arquivos do CNEFE diretamente do FTP do IBGE.
    - Baixa também os arquivos de metadados territoriais (UF, municípios, distritos e subdistritos).
 
-2. **Extração dos Arquivos**  
+2. **Extração dos Arquivos**
    - Descompacta todos os arquivos ZIP dos endereços.
 
-3. **Processamento dos Metadados**  
+3. **Processamento dos Metadados**
    - Gera arquivos JSON com mapeamentos de códigos para nomes (UF, município, distrito e subdistrito).
 
-4. **Processamento dos Endereços**  
+4. **Processamento dos Endereços**
    - Processa os arquivos CSV em chunks para economizar memória.
    - Aplica os mapeamentos dos metadados.
    - Padroniza colunas e gera arquivos CSV consolidados e prontos para análise.
@@ -86,8 +86,8 @@ As variáveis disponíveis no CNEFE:
 
 
 ### **Notas**
-¹ Cada registro representa uma espécie existente no endereço.  
-² O método utilizado para modificação de endereços de apartamentos em um mesmo número de logradouro está apresentado no documento metodológico da publicação.  
+¹ Cada registro representa uma espécie existente no endereço.
+² O método utilizado para modificação de endereços de apartamentos em um mesmo número de logradouro está apresentado no documento metodológico da publicação.
 ³ Os critérios de coordenadas inválidas estão apresentados no documento metodológico da publicação.
 
 
@@ -95,7 +95,7 @@ As variáveis disponíveis no CNEFE:
 
 ## Estrutura de Saída
 
-Após o processamento, o diretório `data/processed` conterá os arquivos CSV consolidados.  
+Após o processamento, o diretório `data/processed` conterá os arquivos CSV consolidados.
 Cada linha representa um endereço único com as seguintes informações:
 
 | Coluna          | Descrição                      |
