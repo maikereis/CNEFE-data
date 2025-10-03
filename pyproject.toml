@@ -29,7 +29,7 @@ build-backend = "setuptools.build_meta"
 
 [tool.pytest.ini_options]
 minversion = "6.0"
-addopts = "--cov=scripts --cov-report=term-missing"
+addopts = "--cov=scripts --cov-report=xml:coverage.xml"
 testpaths = ["tests"]
 
 [tool.coverage.run]
