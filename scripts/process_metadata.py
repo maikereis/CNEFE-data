@@ -11,6 +11,7 @@ STATE_COLUMNS = [
     "UF",
     "Nome_UF",
 ]
+
 STATE_MAPPING_FILENAME = "state_mapping.json"
 
 MUNICIPALITY_COLUMNS = [

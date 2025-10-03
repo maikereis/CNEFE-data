@@ -1,10 +1,10 @@
-import sys
 import json
-import pandas as pd
+import sys
 from pathlib import Path
 from typing import Dict, Iterator
-from tqdm import tqdm
 
+import pandas as pd
+from tqdm import tqdm
 
 CHUNKSIZE = 250_000
 

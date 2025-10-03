@@ -1,8 +1,8 @@
-import pytest
-from pathlib import Path
-import zipfile
-
 import sys
+import zipfile
+from pathlib import Path
+
+import pytest
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 import scripts.extract as extractor

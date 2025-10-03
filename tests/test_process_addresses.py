@@ -1,9 +1,10 @@
-import pytest
+import json
 import sys
 from pathlib import Path
-import pandas as pd
-import json
 from unittest.mock import patch
+
+import pandas as pd
+import pytest
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 import scripts.process_addresses as process_addresses

@@ -1,6 +1,7 @@
 import sys
 from ftplib import FTP
 from pathlib import Path
+
 from tqdm import tqdm
 
 FTP_HOST = "ftp.ibge.gov.br"
