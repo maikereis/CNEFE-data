@@ -83,6 +83,7 @@ jobs:
       - name: Deploy coverage badge
         uses: peaceiris/actions-gh-pages@v3
         with:
-          folder: badges
-          target_branch: gh-pages
+          github_token: ${{ secrets.GH_CI_WORKFLOW_TOKEN }}
+          publish_dir: badges
+          publish_branch: gh-pages
           commit_message: "Update coverage badge"
