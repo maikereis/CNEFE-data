@@ -1,12 +1,11 @@
-import io
 import sys
-import pytest
 from pathlib import Path
 from unittest.mock import Mock, patch
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 
 import scripts.download as download_cnefe
+
 
 def test_download_file_characterization(tmp_path):
     # Arrange
@@ -30,12 +29,13 @@ def test_download_file_characterization(tmp_path):
     fake_ftp.size.assert_called_once_with("remote/file.txt")
     fake_ftp.retrbinary.assert_called_once()
 
+
 @patch("scripts.download.FTP")
 def test_main_characterization(mock_ftp_class, tmp_path):
     # Arrange
     fake_ftp = Mock()
     fake_ftp.nlst.return_value = ["UF/file1.zip", "UF/file2.zip"]
-    fake_ftp.size.return_value = 10 
+    fake_ftp.size.return_value = 10
     mock_ftp_class.return_value = fake_ftp
 
     # Act
