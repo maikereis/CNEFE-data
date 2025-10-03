@@ -1,5 +1,7 @@
 # Cadastro Nacional de Endereços para Fins Estatísticos [CNEFE](https://www.ibge.gov.br/estatisticas/sociais/populacao/38734-cadastro-nacional-de-enderecos-para-fins-estatisticos.html?=&t=o-que-e)
 
+![Coverage Badge](https://raw.githubusercontent.com/maikereis/cnefe-data/gh-pages/badges/coverage.svg)
+
 Este projeto tem como objetivo **baixar, extrair, processar e consolidar** os dados do **Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE)**, disponibilizados pelo [IBGE](https://www.ibge.gov.br/).
 O pipeline integra informações do **Censo Demográfico 2022** com metadados territoriais, produzindo **arquivos CSV limpos e estruturados** para análise e utilização em pesquisas e aplicações georreferenciadas.
 

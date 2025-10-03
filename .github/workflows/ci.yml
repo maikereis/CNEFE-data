@@ -9,7 +9,7 @@ on:
       - master
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -32,3 +32,22 @@ jobs:
       - name: Run tests with coverage
         run: |
           uv run --frozen pytest --cov=scripts --cov-report=xml:coverage.xml
+
+  coverage-badge:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Generate coverage badge
+        uses: llueder/coverage-badge-action-pytest@v1
+        with:
+          coverage_file: coverage.xml
+          badge_file: coverage.svg
+
+      - name: Deploy coverage badge
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          folder: badges
+          target_branch: gh-pages
+          commit_message: "Update coverage badge"
