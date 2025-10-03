@@ -39,11 +39,34 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - name: Generate coverage badge
-        uses: llueder/coverage-badge-action-pytest@v1
-        with:
-          coverage_file: coverage.xml
-          badge_file: coverage.svg
+      - name: Install dependencies
+        run: |
+          pip install coverage xmltodict
+
+      - name: Generate coverage badge via Shields.io
+        run: |
+          python - << 'EOF'
+          import xmltodict
+          from pathlib import Path
+          import requests
+
+          # Parse coverage.xml
+          cov_file = Path("coverage.xml")
+          with cov_file.open() as f:
+              doc = xmltodict.parse(f.read())
+          total_coverage = float(doc['coverage']['@line-rate']) * 100
+          color = "red" if total_coverage < 50 else "yellow" if total_coverage < 80 else "brightgreen"
+
+          # Generate badge SVG from Shields.io
+          badge_url = f"https://img.shields.io/badge/coverage-{total_coverage:.1f}%25-{color}.svg"
+          svg = requests.get(badge_url).text
+
+          # Save badge
+          badge_path = Path("badges/coverage.svg")
+          badge_path.parent.mkdir(exist_ok=True)
+          badge_path.write_text(svg)
+          print(f"Coverage badge generated at {badge_path}")
+          EOF
 
       - name: Deploy coverage badge
         uses: peaceiris/actions-gh-pages@v3
