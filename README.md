@@ -1,6 +1,12 @@
 # Cadastro Nacional de Endereços para Fins Estatísticos [CNEFE](https://www.ibge.gov.br/estatisticas/sociais/populacao/38734-cadastro-nacional-de-enderecos-para-fins-estatisticos.html?=&t=o-que-e)
 
+![CI](https://github.com/maikereis/CNEFE-data/actions/workflows/ci.yml/badge.svg)
 ![Coverage Badge](https://raw.githubusercontent.com/maikereis/CNEFE-data/gh-pages/coverage.svg)
+![Status](https://img.shields.io/badge/status-in%20refactoring-orange)
+![Issues](https://img.shields.io/github/issues/maikereis/CNEFE-data)
+
+
+---
 
 Este projeto tem como objetivo **baixar, extrair, processar e consolidar** os dados do **Cadastro Nacional de Endereços para Fins Estatísticos (CNEFE)**, disponibilizados pelo [IBGE](https://www.ibge.gov.br/).
 O pipeline integra informações do **Censo Demográfico 2022** com metadados territoriais, produzindo **arquivos CSV limpos e estruturados** para análise e utilização em pesquisas e aplicações georreferenciadas.
@@ -133,3 +139,10 @@ Parte da tabela original já está incluída no início deste repositório.
 * [PNAD Contínua](https://www.ibge.gov.br/estatisticas/sociais/saude/17270-pnad-continua.html)
 
 * [POF – Pesquisa de Orçamentos Familiares](https://www.ibge.gov.br/pof2024/)
+
+
+### Documentação / Notas de Projeto
+Este projeto está atualmente em refatoração. Alguns scripts ou interfaces podem mudar enquanto o trabalho está em andamento.
+* [Comportamento Atual](docs/actual_behavior.md) – Informações sobre o comportamento do pipeline antes do refatoramento.
+* [Antes do Refatoramento](docs/pre_refactoring.md) – Estado do código antes do início da refatoração.
+* [Design de Domínio](docs/domain_design.md) – Modelo de domínio, agregados, entidades, value objects, serviços e eventos.
