@@ -57,7 +57,7 @@ class PostalCode:
 
 
 @dataclass(frozen=True)
-class TerritorialCode:
+class TerritorialDivision:
     uf: str
     municipality: str
     district: str
@@ -65,12 +65,17 @@ class TerritorialCode:
 
     def __post_init__(self):
         if not all(
-            isinstance(code, str)
-            for code in [self.uf, self.municipality, self.district, self.subdistrict]
+            isinstance(division, str)
+            for division in [
+                self.uf,
+                self.municipality,
+                self.district,
+                self.subdistrict,
+            ]
         ):
-            raise ValueError("All territorial codes should be of type str")
+            raise ValueError("All territorial divisions should be of type str")
         if len(self.uf) != 2 or not self.uf.isalpha:
-            raise ValueError("UF code should be 2 alphabetic characters")
+            raise ValueError("UF name should be 2 alphabetic characters")
 
 
 @dataclass(frozen=True)
@@ -80,5 +85,3 @@ class StreetAddress:
     number: str
     complement: str
     neighborhood: str
-    postal_code: PostalCode
-    territorial_code: TerritorialCode

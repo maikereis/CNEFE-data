@@ -7,7 +7,7 @@ from addresses.domain.value_objects import (
     Coordinate,
     GeocodingLevel,
     PostalCode,
-    TerritorialCode,
+    TerritorialDivision,
 )
 
 
@@ -143,7 +143,7 @@ def test_postal_code_immutable():
 
 
 def test_territorial_code_valid():
-    code = TerritorialCode(
+    code = TerritorialDivision(
         uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
     )
     assert code.uf == "PB"
@@ -153,24 +153,32 @@ def test_territorial_code_valid():
 
 
 def test_territorial_code_invalid():
-    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
-        TerritorialCode(
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
             uf=123, municipality="São João", district="Cidade Nova", subdistrict="Vila"
         )
-    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
-        TerritorialCode(
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
             uf="PB", municipality=None, district="Cidade Nova", subdistrict="Vila"
         )
-    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
-        TerritorialCode(
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
             uf="PB", municipality="São João", district=456, subdistrict="Vila"
         )
-    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
-        TerritorialCode(
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
             uf="PB", municipality="São João", district="Cidade Nova", subdistrict=789
         )
-    with pytest.raises(ValueError, match="UF code should be 2 alphabetic characters"):
-        TerritorialCode(
+    with pytest.raises(ValueError, match="UF name should be 2 alphabetic characters"):
+        TerritorialDivision(
             uf="PBR",
             municipality="São João",
             district="Cidade Nova",
@@ -179,7 +187,7 @@ def test_territorial_code_invalid():
 
 
 def test_territorial_code_immutable():
-    code = TerritorialCode(
+    code = TerritorialDivision(
         uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
     )
     with pytest.raises(FrozenInstanceError):
