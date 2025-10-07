@@ -54,3 +54,20 @@ class PostalCode:
             raise ValueError(
                 "Postal code should contain only digits in the format XXXX-XXX"
             )
+
+
+@dataclass(frozen=True)
+class TerritorialCode:
+    uf: str
+    municipality: str
+    district: str
+    subdistrict: str
+
+    def __post_init__(self):
+        if not all(
+            isinstance(code, str)
+            for code in [self.uf, self.municipality, self.district, self.subdistrict]
+        ):
+            raise ValueError("All territorial codes should be of type str")
+        if len(self.uf) != 2 or not self.uf.isalpha:
+            raise ValueError("UF code should be 2 alphabetic characters")

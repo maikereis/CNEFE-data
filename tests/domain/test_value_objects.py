@@ -7,6 +7,7 @@ from addresses.domain.value_objects import (
     Coordinate,
     GeocodingLevel,
     PostalCode,
+    TerritorialCode,
 )
 
 
@@ -139,3 +140,39 @@ def test_postal_code_immutable():
     code = PostalCode(code="1234-567")
     with pytest.raises(FrozenInstanceError):
         code.code = "7654-321"
+
+
+def test_territorial_code_valid():
+    code = TerritorialCode(
+        uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
+    )
+    assert code.uf == "PB"
+    assert code.municipality == "São João"
+    assert code.district == "Cidade Nova"
+    assert code.subdistrict == "Vila"
+
+
+def test_territorial_code_invalid():
+    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
+        TerritorialCode(
+            uf=123, municipality="São João", district="Cidade Nova", subdistrict="Vila"
+        )
+    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
+        TerritorialCode(
+            uf="PB", municipality=None, district="Cidade Nova", subdistrict="Vila"
+        )
+    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
+        TerritorialCode(
+            uf="PB", municipality="São João", district=456, subdistrict="Vila"
+        )
+    with pytest.raises(ValueError, match="All territorial codes should be of type str"):
+        TerritorialCode(
+            uf="PB", municipality="São João", district="Cidade Nova", subdistrict=789
+        )
+    with pytest.raises(ValueError, match="UF code should be 2 alphabetic characters"):
+        TerritorialCode(
+            uf="PBR",
+            municipality="São João",
+            district="Cidade Nova",
+            subdistrict="Vila",
+        )
