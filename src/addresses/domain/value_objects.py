@@ -42,17 +42,17 @@ class Coordinate:
 
 @dataclass(frozen=True)
 class PostalCode:
-    code: str  # Fomat: XXXX-XXX
+    code: str  # Fomat: XXXXX-XXX
 
     def __post_init__(self):
         if not isinstance(self.code, str):
             raise ValueError("Postal code should be of type str")
-        if len(self.code) != 8 or self.code[4] != "-":
-            raise ValueError("Postal code should be in the format XXXX-XXX")
+        if len(self.code) != 9 or self.code[5] != "-":
+            raise ValueError("Postal code should be in the format XXXXX-XXX")
         prefix, suffix = self.code.split("-")
         if not (prefix.isdigit() and suffix.isdigit()):
             raise ValueError(
-                "Postal code should contain only digits in the format XXXX-XXX"
+                "Postal code should contain only digits in the format XXXXX-XXX"
             )
 
 
@@ -71,3 +71,14 @@ class TerritorialCode:
             raise ValueError("All territorial codes should be of type str")
         if len(self.uf) != 2 or not self.uf.isalpha:
             raise ValueError("UF code should be 2 alphabetic characters")
+
+
+@dataclass(frozen=True)
+class StreetAddress:
+    street: str
+    street_type: str
+    number: str
+    complement: str
+    neighborhood: str
+    postal_code: PostalCode
+    territorial_code: TerritorialCode

@@ -109,37 +109,37 @@ def test_coordinate_immutable():
 
 
 def test_postal_code_valid():
-    code = PostalCode(code="1234-567")
-    assert code.code == "1234-567"
+    code = PostalCode(code="12340-567")
+    assert code.code == "12340-567"
 
 
 def test_postal_code_invalid():
     with pytest.raises(ValueError, match="Postal code should be of type str"):
-        PostalCode(code=1234567)  # Not a string
+        PostalCode(code=12345670)  # Not a string
     with pytest.raises(
-        ValueError, match="Postal code should be in the format XXXX-XXX"
+        ValueError, match="Postal code should be in the format XXXXX-XXX"
     ):
-        PostalCode(code="1234567")  # Missing hyphen
+        PostalCode(code="12345670")  # Missing hyphen
     with pytest.raises(
-        ValueError, match="Postal code should be in the format XXXX-XXX"
+        ValueError, match="Postal code should be in the format XXXXX-XXX"
     ):
-        PostalCode(code="12345-67")  # Incorrect format
-    with pytest.raises(
-        ValueError,
-        match="Postal code should contain only digits in the format XXXX-XXX",
-    ):
-        PostalCode(code="12A4-567")  # Non-digit character
+        PostalCode(code="1234-5670")  # Incorrect format
     with pytest.raises(
         ValueError,
-        match="Postal code should contain only digits in the format XXXX-XXX",
+        match="Postal code should contain only digits in the format XXXXX-XXX",
     ):
-        PostalCode(code="1234-56B")  # Non-digit character
+        PostalCode(code="12A40-567")  # Non-digit character
+    with pytest.raises(
+        ValueError,
+        match="Postal code should contain only digits in the format XXXXX-XXX",
+    ):
+        PostalCode(code="12340-56B")  # Non-digit character
 
 
 def test_postal_code_immutable():
-    code = PostalCode(code="1234-567")
+    code = PostalCode(code="12340-567")
     with pytest.raises(FrozenInstanceError):
-        code.code = "7654-321"
+        code.code = "76540-321"
 
 
 def test_territorial_code_valid():
