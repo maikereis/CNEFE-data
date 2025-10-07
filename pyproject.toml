@@ -33,7 +33,7 @@ addopts = "--cov=scripts --cov-report=xml:coverage.xml"
 testpaths = ["tests"]
 
 [tool.coverage.run]
-source = ["scripts"]
+source = ["scripts", "src"]
 omit = [
   "scripts/__init__.py",
   "scripts/*/__main__.py"
