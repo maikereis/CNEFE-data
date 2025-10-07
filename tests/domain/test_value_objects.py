@@ -176,3 +176,11 @@ def test_territorial_code_invalid():
             district="Cidade Nova",
             subdistrict="Vila",
         )
+
+
+def test_territorial_code_immutable():
+    code = TerritorialCode(
+        uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
+    )
+    with pytest.raises(FrozenInstanceError):
+        code.uf = "RJ"
