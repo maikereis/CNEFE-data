@@ -1,6 +1,14 @@
+from dataclasses import FrozenInstanceError
+
 import pytest
 
-from addresses.domain.value_objects import AddressSpecies, GeocodingLevel
+from addresses.domain.value_objects import (
+    AddressSpecies,
+    Coordinate,
+    GeocodingLevel,
+    PostalCode,
+    TerritorialDivision,
+)
 
 
 def test_geocoding_level_values():
@@ -61,3 +69,126 @@ def test_invalid_address_species_enum_lookup_by_value():
 def test_invalid_address_species_enum_access_by_name():
     with pytest.raises(AttributeError):
         _ = AddressSpecies.NON_EXISTENT
+
+
+def test_coordinate_valid():
+    coord = Coordinate(latitude=45.0, longitude=90.0, precision=1)
+    assert coord.latitude == 45.0
+    assert coord.longitude == 90.0
+
+
+def test_coordinate_invalid():
+    with pytest.raises(ValueError):
+        Coordinate(latitude=100.0, longitude=90.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude=45.0, longitude=200.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude="not_a_float", longitude=90.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude=45.0, longitude="not_a_float", precision=None)
+
+
+def test_coordinate_invalid_latitude():
+    with pytest.raises(ValueError, match="latitude should be between -90 and 90"):
+        Coordinate(latitude=95.0, longitude=45.0, precision=None)
+    with pytest.raises(ValueError, match="latitude should be of type float"):
+        Coordinate(latitude="invalid", longitude=45.0, precision=None)
+
+
+def test_coordinate_invalid_longitude():
+    with pytest.raises(ValueError, match="longitude should be between -180 and 180"):
+        Coordinate(latitude=45.0, longitude=195.0, precision=None)
+    with pytest.raises(ValueError, match="longitude should be of type float"):
+        Coordinate(latitude=45.0, longitude="invalid", precision=None)
+
+
+def test_coordinate_immutable():
+    coord = Coordinate(0.0, 0.0, 1)
+    with pytest.raises(FrozenInstanceError):
+        coord.latitude = 10
+
+
+def test_postal_code_valid():
+    code = PostalCode(code="12340-567")
+    assert code.code == "12340-567"
+
+
+def test_postal_code_invalid():
+    with pytest.raises(ValueError, match="Postal code should be of type str"):
+        PostalCode(code=12345670)  # Not a string
+    with pytest.raises(
+        ValueError, match="Postal code should be in the format XXXXX-XXX"
+    ):
+        PostalCode(code="12345670")  # Missing hyphen
+    with pytest.raises(
+        ValueError, match="Postal code should be in the format XXXXX-XXX"
+    ):
+        PostalCode(code="1234-5670")  # Incorrect format
+    with pytest.raises(
+        ValueError,
+        match="Postal code should contain only digits in the format XXXXX-XXX",
+    ):
+        PostalCode(code="12A40-567")  # Non-digit character
+    with pytest.raises(
+        ValueError,
+        match="Postal code should contain only digits in the format XXXXX-XXX",
+    ):
+        PostalCode(code="12340-56B")  # Non-digit character
+
+
+def test_postal_code_immutable():
+    code = PostalCode(code="12340-567")
+    with pytest.raises(FrozenInstanceError):
+        code.code = "76540-321"
+
+
+def test_territorial_code_valid():
+    code = TerritorialDivision(
+        uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
+    )
+    assert code.uf == "PB"
+    assert code.municipality == "São João"
+    assert code.district == "Cidade Nova"
+    assert code.subdistrict == "Vila"
+
+
+def test_territorial_code_invalid():
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
+            uf=123, municipality="São João", district="Cidade Nova", subdistrict="Vila"
+        )
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
+            uf="PB", municipality=None, district="Cidade Nova", subdistrict="Vila"
+        )
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
+            uf="PB", municipality="São João", district=456, subdistrict="Vila"
+        )
+    with pytest.raises(
+        ValueError, match="All territorial divisions should be of type str"
+    ):
+        TerritorialDivision(
+            uf="PB", municipality="São João", district="Cidade Nova", subdistrict=789
+        )
+    with pytest.raises(ValueError, match="UF name should be 2 alphabetic characters"):
+        TerritorialDivision(
+            uf="PBR",
+            municipality="São João",
+            district="Cidade Nova",
+            subdistrict="Vila",
+        )
+
+
+def test_territorial_code_immutable():
+    code = TerritorialDivision(
+        uf="PB", municipality="São João", district="Cidade Nova", subdistrict="Vila"
+    )
+    with pytest.raises(FrozenInstanceError):
+        code.uf = "RJ"
