@@ -38,3 +38,19 @@ class Coordinate:
             raise ValueError("longitude should be of type float")
         if not (-180 <= self.longitude <= 180):
             raise ValueError("longitude should be between -180 and 180")
+
+
+@dataclass(frozen=True)
+class PostalCode:
+    code: str  # Fomat: XXXX-XXX
+
+    def __post_init__(self):
+        if not isinstance(self.code, str):
+            raise ValueError("Postal code should be of type str")
+        if len(self.code) != 8 or self.code[4] != "-":
+            raise ValueError("Postal code should be in the format XXXX-XXX")
+        prefix, suffix = self.code.split("-")
+        if not (prefix.isdigit() and suffix.isdigit()):
+            raise ValueError(
+                "Postal code should contain only digits in the format XXXX-XXX"
+            )

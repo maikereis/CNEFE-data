@@ -2,7 +2,12 @@ from dataclasses import FrozenInstanceError
 
 import pytest
 
-from addresses.domain.value_objects import AddressSpecies, Coordinate, GeocodingLevel
+from addresses.domain.value_objects import (
+    AddressSpecies,
+    Coordinate,
+    GeocodingLevel,
+    PostalCode,
+)
 
 
 def test_geocoding_level_values():
@@ -100,3 +105,37 @@ def test_coordinate_immutable():
     coord = Coordinate(0.0, 0.0, 1)
     with pytest.raises(FrozenInstanceError):
         coord.latitude = 10
+
+
+def test_postal_code_valid():
+    code = PostalCode(code="1234-567")
+    assert code.code == "1234-567"
+
+
+def test_postal_code_invalid():
+    with pytest.raises(ValueError, match="Postal code should be of type str"):
+        PostalCode(code=1234567)  # Not a string
+    with pytest.raises(
+        ValueError, match="Postal code should be in the format XXXX-XXX"
+    ):
+        PostalCode(code="1234567")  # Missing hyphen
+    with pytest.raises(
+        ValueError, match="Postal code should be in the format XXXX-XXX"
+    ):
+        PostalCode(code="12345-67")  # Incorrect format
+    with pytest.raises(
+        ValueError,
+        match="Postal code should contain only digits in the format XXXX-XXX",
+    ):
+        PostalCode(code="12A4-567")  # Non-digit character
+    with pytest.raises(
+        ValueError,
+        match="Postal code should contain only digits in the format XXXX-XXX",
+    ):
+        PostalCode(code="1234-56B")  # Non-digit character
+
+
+def test_postal_code_immutable():
+    code = PostalCode(code="1234-567")
+    with pytest.raises(FrozenInstanceError):
+        code.code = "7654-321"
