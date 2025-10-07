@@ -1,6 +1,8 @@
+from dataclasses import FrozenInstanceError
+
 import pytest
 
-from addresses.domain.value_objects import AddressSpecies, GeocodingLevel
+from addresses.domain.value_objects import AddressSpecies, Coordinate, GeocodingLevel
 
 
 def test_geocoding_level_values():
@@ -61,3 +63,40 @@ def test_invalid_address_species_enum_lookup_by_value():
 def test_invalid_address_species_enum_access_by_name():
     with pytest.raises(AttributeError):
         _ = AddressSpecies.NON_EXISTENT
+
+
+def test_coordinate_valid():
+    coord = Coordinate(latitude=45.0, longitude=90.0, precision=1)
+    assert coord.latitude == 45.0
+    assert coord.longitude == 90.0
+
+
+def test_coordinate_invalid():
+    with pytest.raises(ValueError):
+        Coordinate(latitude=100.0, longitude=90.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude=45.0, longitude=200.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude="not_a_float", longitude=90.0, precision=None)
+    with pytest.raises(ValueError):
+        Coordinate(latitude=45.0, longitude="not_a_float", precision=None)
+
+
+def test_coordinate_invalid_latitude():
+    with pytest.raises(ValueError, match="latitude should be between -90 and 90"):
+        Coordinate(latitude=95.0, longitude=45.0, precision=None)
+    with pytest.raises(ValueError, match="latitude should be of type float"):
+        Coordinate(latitude="invalid", longitude=45.0, precision=None)
+
+
+def test_coordinate_invalid_longitude():
+    with pytest.raises(ValueError, match="longitude should be between -180 and 180"):
+        Coordinate(latitude=45.0, longitude=195.0, precision=None)
+    with pytest.raises(ValueError, match="longitude should be of type float"):
+        Coordinate(latitude=45.0, longitude="invalid", precision=None)
+
+
+def test_coordinate_immutable():
+    coord = Coordinate(0.0, 0.0, 1)
+    with pytest.raises(FrozenInstanceError):
+        coord.latitude = 10

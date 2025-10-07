@@ -1,3 +1,4 @@
+from dataclasses import dataclass
 from enum import Enum
 
 
@@ -19,3 +20,21 @@ class AddressSpecies(Enum):
     OTHER_ESTABLISHMENT = 6
     UNDER_CONSTRUCTION = 7
     RELIGIOUS = 8
+
+
+@dataclass(frozen=True)
+class Coordinate:
+    latitude: float
+    longitude: float
+    precision: GeocodingLevel
+
+    def __post_init__(self):
+        if not isinstance(self.latitude, float):
+            raise ValueError("latitude should be of type float")
+        if not (-90 <= self.latitude <= 90):
+            raise ValueError("latitude should be between -90 and 90")
+
+        if not isinstance(self.longitude, float):
+            raise ValueError("longitude should be of type float")
+        if not (-180 <= self.longitude <= 180):
+            raise ValueError("longitude should be between -180 and 180")
