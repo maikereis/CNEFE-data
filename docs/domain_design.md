@@ -3,8 +3,8 @@
 ## Ubiquitous Language
 
 * **Address**: A georeferenced location with administrative divisions
-* **TerritorialDivision**: Hierarchical administrative unit (UF → Municipality → District → Subdistrict)
-* **Territorial Code**: Hierarchical IBGE identifier
+* **Territorial Division**: Hierarchical administrative unit (UF → Municipality → District → Subdistrict)
+* **Territorial Codes**: Hierarchical IBGE identifier
 * **Address Species**: Classification (residential, commercial, construction, establishment)
 * **Address Component**: Parts of address (Street, Number, Complement)
 * **CNEFE**: Cadastro Nacional de Endereços para Fins Estatísticos
@@ -83,16 +83,6 @@
   - Coordinate precision must match geocoding level
   - Species determines required establishment metadata
 
-### Entities
-
-**TerritorialDivision** (Entity within Address)
-- Identity: Composite of territorial codes
-- Attributes:
-  - `state_code`, `state_name`
-  - `municipality_code`, `municipality_name`
-  - `district_code`, `district_name`
-  - `subdistrict_code`, `subdistrict_name`
-
 ### Value Objects
 
 **Coordinate**
@@ -122,10 +112,10 @@ class PostalCode:
     code: str  # Format: XXXXX-XXX
 ```
 
-**TerritorialCode**
+**TerritorialDivision**
 ```python
 @dataclass(frozen=True)
-class TerritorialCode:
+class TerritorialDivision:
     uf: str
     municipality: str
     district: str
@@ -187,7 +177,7 @@ class GeocodingLevel(Enum):
 class AddressRepository(Protocol):
     def save_batch(self, addresses: List[Address]) -> None
     def find_by_id(self, address_id: str) -> Optional[Address]
-    def find_by_territorial_code(self, code: TerritorialCode) -> List[Address]
+    def find_by_territorial_division(self, code: TerritorialDivision) -> List[Address]
     def find_by_postal_code(self, postal_code: PostalCode) -> List[Address]
 ```
 
