@@ -16,10 +16,10 @@ metadata:
 	@$(PYTHON_INTERPRETER) scripts/metadata.py data/metadata
 
 extract:
-	@$(PYTHON_INTERPRETER) scripts/extract.py data/raw data/extracted/addresses extension='.csv'
+	@$(PYTHON_INTERPRETER) scripts/extract.py data/raw data/extracted/addresses '.csv'
 
 extract_metadata:
-	@$(PYTHON_INTERPRETER) scripts/extract.py data/metadata data/extracted/metadata extension='.xls'
+	@$(PYTHON_INTERPRETER) scripts/extract.py data/metadata data/extracted/metadata '.xls'
 
 process_metadata:
 	@$(PYTHON_INTERPRETER) scripts/process_metadata.py data/extracted/metadata data/processed/metadata
